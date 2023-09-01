@@ -1,7 +1,10 @@
 import Image from "next/image";
+import { prisma } from "./db";
 import Link from "next/link";
+import TodoItem from "../components/TodoItem";
 
-export default function Home() {
+export default async function Home() {
+  const todos = await prisma.todo.findMany();
   return (
     <>
       <header
@@ -17,7 +20,11 @@ export default function Home() {
           New
         </Link>
       </header>
-      <ul></ul>
+      <ul>
+        {todos.map((todo) => (
+          <TodoItem key={todo.id} {...todo} />
+        ))}
+      </ul>
     </>
   );
 }
